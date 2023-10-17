@@ -26,6 +26,7 @@ const monsters = [
 
 const updateLock = ref(false);
 
+const monsterCard = ref(null);
 const monsterName = ref(null);
 const monsterImg = ref(null);
 const monsterMojo = ref(null);
@@ -50,11 +51,19 @@ const clickHandler = () => {
 const updateMonster = () => {
     updateLock.value = true;
 
+    gsap.to(monsterCard.value, { 
+        duration: 0.3, 
+        z: -50,
+        rotateX: 5,
+        repeat:1,
+        yoyo: true
+    });
+
     // name
     gsap.to(monsterName.value, { 
         duration: 0.2, 
         rotateX: -90, 
-        z: 250,
+        z: -100,
         onComplete:()=>{
             activeMonster.value.name = monsters[monsterIndex].name
         } 
@@ -88,13 +97,13 @@ const updateMonster = () => {
         duration: 1, 
         width: `${activeMonster.value.mojo}%`,
         ease: "back.out(1.3)",
-        delay: 0.3
+        delay: 0.2
     });
     gsap.to(monsterUnagi.value, { 
         duration: 1, 
         width: `${activeMonster.value.unagi}%`,
         ease: "back.out(1.3)",
-        delay: 0.5
+        delay: 0.4
     });
     
     setTimeout(updateIndex, 1500);
@@ -121,6 +130,9 @@ onMounted(()=>{
     gsap.set(".monster__name-container", {
         perspective: 300
     });
+    gsap.set("#app", {
+        perspective: 700
+    });
 
     updateMonster();
 });
@@ -133,7 +145,7 @@ onMounted(()=>{
 
 
 <template>
-    <section class="monster" @click="clickHandler">
+    <section ref="monsterCard" class="monster" @click="clickHandler">
         <div class="monster__img-container">
             <img ref="monsterImg" class="monster__img" :src="`/monsters/${activeMonster.img}`" />
         </div>
